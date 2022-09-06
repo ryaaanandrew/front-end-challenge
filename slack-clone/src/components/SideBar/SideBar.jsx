@@ -1,13 +1,26 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  createChannel,
+  removeChannel,
+} from "../../pages/chat/chat-redux-slice";
 import styles from "./sideBar.module.scss";
 
 const SideBar = () => {
+  const [newChannelName, setNewChannelName] = useState("");
   const [channels, users] = useSelector(({ chat }) => {
     return [chat.channels, chat.users];
   });
-  const handleChannelClick = (channelName) => {
-    console.log("##### Channel: ", channelName);
+
+  const dispatch = useDispatch();
+
+  const handleCreateChannel = (channelName) => {
+    dispatch(createChannel(channelName));
+    setNewChannelName("");
+  };
+
+  const handleRemoveChannel = (index) => {
+    dispatch(removeChannel(index));
   };
 
   const handleUserClick = (username) => {
@@ -18,14 +31,27 @@ const SideBar = () => {
     <div className={styles.container}>
       <div className={styles.subContainer}>
         <h1>Channels</h1>
-        {channels?.map((channel) => {
+        {channels?.map((channel, index) => {
           return (
-            <h3 onClick={() => handleChannelClick(channel.name)}>
-              {channel.name}
-            </h3>
+            <div className={styles.channel__item}>
+              <h3 onClick={() => handleCreateChannel(channel.name)}>
+                {channel.name}
+              </h3>
+              <button onClick={() => handleRemoveChannel(index)}>x</button>
+            </div>
           );
         })}
-        <button>Create Channel</button>
+        <input
+          placeholder={"New channel name"}
+          onChange={(e) => setNewChannelName(e.target.value)}
+          value={newChannelName}
+        />
+        <button
+          onClick={() => handleCreateChannel(newChannelName)}
+          disabled={newChannelName.length === 0}
+        >
+          Create Channel
+        </button>
       </div>
       <div className={styles.subContainer}>
         <h1>Users</h1>

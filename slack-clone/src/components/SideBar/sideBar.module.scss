@@ -4,5 +4,15 @@
 
 .subContainer {
   height: 50%;
-  border: 2px solid blue;
+  // border: 2px solid blue;
+  overflow-y: scroll;
+}
+
+.channel {
+  &__item {
+    // border: 1px solid green;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
