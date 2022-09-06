@@ -1,23 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styles from "./sideBar.module.scss";
 
-const fakeChannels = [
-  { name: "Channel 1" },
-  { name: "Channel 2" },
-  { name: "Channel 3" },
-  { name: "Channel 4" },
-  { name: "Channel 5" },
-];
-
-const fakeUsers = [
-  { name: "User 1" },
-  { name: "User 2" },
-  { name: "User 3" },
-  { name: "User 4" },
-  { name: "User 5" },
-];
-
 const SideBar = () => {
+  const [channels, users] = useSelector(({ chat }) => {
+    return [chat.channels, chat.users];
+  });
   const handleChannelClick = (channelName) => {
     console.log("##### Channel: ", channelName);
   };
@@ -30,7 +18,7 @@ const SideBar = () => {
     <div className={styles.container}>
       <div className={styles.subContainer}>
         <h1>Channels</h1>
-        {fakeChannels?.map((channel) => {
+        {channels?.map((channel) => {
           return (
             <h3 onClick={() => handleChannelClick(channel.name)}>
               {channel.name}
@@ -41,7 +29,7 @@ const SideBar = () => {
       </div>
       <div className={styles.subContainer}>
         <h1>Users</h1>
-        {fakeUsers?.map((user) => {
+        {users?.map((user) => {
           return (
             <h3 onClick={() => handleUserClick(user.name)}>{user.name}</h3>
           );
